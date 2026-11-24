@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { FaqAccordion } from '../components/FaqAccordion';
+import type { FaqItem } from '../components/FaqAccordion';
+import faqData from '../data/faq.json';
+
+const faqItems = faqData as FaqItem[];
+---
+
+<Layout
+  title="Preguntas Frecuentes"
+  description="Respuestas institucionales oficiales a las 12 preguntas frecuentes sobre la articulación, participación, costos y funcionamiento de la Red Nacional de Museos Universitarios (RNMU)."
+>
+  <!-- Header Page Banner -->
+  <div class="bg-gradient-to-r from-brand-burgundy-950 via-brand-burgundy-900 to-gray-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+      <span class="text-xs uppercase tracking-widest text-brand-gold-400 font-bold">Claridad Institucional</span>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-tight">
+        Preguntas Frecuentes (FAQ)
+      </h1>
+      <p class="text-base sm:text-lg text-brand-burgundy-100 max-w-3xl font-light">
+        Documento oficial de respuestas a las dudas jurídicas, administrativas y de participación en la Red Nacional de Museos Universitarios.
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+    <!-- Intro Note -->
+    <div class="p-5 rounded-2xl bg-brand-burgundy-50 border border-brand-burgundy-100 text-xs sm:text-sm text-brand-burgundy-950 leading-relaxed">
+      <strong>Resolución 1975 de 2013:</strong> Las siguientes 12 respuestas responden formalmente a las consultas de directores, vicerrectores de investigación, curadores y delegados de museos universitarios respecto al marco legal, los niveles de vinculación y los beneficios del trabajo en red.
+    </div>
+
+    <!-- Interactive Client React Island -->
+    <FaqAccordion client:load items={faqItems} />
+
+    <!-- Help / Contact Box -->
+    <div class="mt-12 bg-white rounded-3xl p-8 border border-gray-200 text-center space-y-4 shadow-sm">
+      <h3 class="text-xl font-serif font-bold text-gray-900">¿Tienes alguna pregunta adicional?</h3>
+      <p class="text-sm text-gray-600 max-w-xl mx-auto">
+        Comunícate directamente con la coordinación de la Red para resolver dudas específicas sobre tu institución o convenios interinstitucionales.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+        <a
+          href="mailto:reddemuseosuniversitarios@gmail.com"
+          class="px-5 py-2.5 rounded-xl bg-brand-burgundy-800 text-white text-xs font-semibold hover:bg-brand-burgundy-900 transition-colors shadow-sm"
+        >
+          Escribir a reddemuseosuniversitarios@gmail.com
+        </a>
+        <a
+          href="https://wa.me/573164963906"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-500 transition-colors shadow-sm"
+        >
+          Contactar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>

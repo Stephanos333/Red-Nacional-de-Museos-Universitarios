@@ -1,0 +1,66 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Portal oficial de la Red Nacional de Museos Universitarios (RNMU) de Colombia. Espacio de encuentro, caracterización y fortalecimiento de museos y colecciones universitarias.',
+} = Astro.props;
+
+// `site` se define en astro.config.mjs; Astro.url ya incluye el `base`.
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO & Metadata -->
+    <title>{title} | Red Nacional de Museos Universitarios de Colombia</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="museos universitarios, colombia, RNMU, patrimonio cultural, colecciones biologicas, arqueologia, historia, SIMCO, acreditacion CNA" />
+    <meta name="author" content="Red Nacional de Museos Universitarios" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={`${title} | RNMU Colombia`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="es_CO" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} | RNMU Colombia`} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Tipografía: solo fuentes nativas del sistema (sin peticiones a terceros) -->
+  </head>
+  <body class="min-h-full flex flex-col bg-[#faf9f6] text-slate-800 antialiased font-sans selection:bg-brand-burgundy-100 selection:text-brand-burgundy-900">
+    <!-- Skip to main content for accessibility (WCAG AA) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-burgundy-900 focus:text-white focus:rounded-lg focus:shadow-lg focus:ring-2 focus:ring-brand-gold-400"
+    >
+      Saltar al contenido principal
+    </a>
+
+    <Header />
+
+    <main id="main-content" class="flex-grow">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

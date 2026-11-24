@@ -1,0 +1,249 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StatsDashboard from '../components/StatsDashboard.astro';
+import museosData from '../data/museos.json';
+import statsData from '../data/stats.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const getHref = (href: string) => (href === '/' ? `${base}/` : `${base}${href}`);
+const { totalMuseos } = statsData;
+
+// Sample featured museums for quick discovery
+const featuredMuseos = museosData.slice(0, 6);
+
+// Color del indicador de estado: solo los museos abiertos llevan punto verde.
+const estadoStyle: Record<string, { text: string; dot: string }> = {
+  Abierto: { text: 'text-emerald-700', dot: 'bg-emerald-500' },
+  'Cita previa': { text: 'text-amber-700', dot: 'bg-amber-500' },
+  'Cerrado temporalmente': { text: 'text-rose-700', dot: 'bg-rose-500' },
+  Cerrado: { text: 'text-rose-700', dot: 'bg-rose-500' },
+  'Sin información': { text: 'text-gray-500', dot: 'bg-gray-400' },
+};
+---
+
+<Layout
+  title="Inicio"
+  description="Red Nacional de Museos Universitarios de Colombia (RNMU). Espacio de articulación, caracterización y cooperación entre museos, colecciones y espacios patrimoniales de las IES colombianas."
+>
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-brand-burgundy-950 via-brand-burgundy-900 to-gray-950 text-white overflow-hidden py-20 lg:py-28">
+    <!-- Subtle background geometric overlay -->
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#c59b27_1px,transparent_1px)] [background-size:24px_24px]"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl space-y-6">
+        <!-- Official Recognition Pill -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-burgundy-800/80 border border-brand-gold-500/30 text-xs text-brand-gold-300 font-semibold shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-brand-gold-400 animate-pulse"></span>
+          <span>Red Temática Avalada por el Programa Fortalecimiento de Museos (PFM)</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-black tracking-tight leading-tight text-white">
+          Patrimonio, Ciencia y Cultura en las Universidades de Colombia
+        </h1>
+
+        <p class="text-lg sm:text-xl text-brand-burgundy-100/90 leading-relaxed font-light">
+          Somos la <strong>Red Nacional de Museos Universitarios (RNMU)</strong>. Conectamos a los museos, colecciones y espacios patrimoniales de educación superior del país para construir capacidades compartidas y transformar los territorios.
+        </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-wrap items-center gap-4 pt-4">
+          <a
+            href={getHref('/directorio')}
+            class="px-6 py-3.5 rounded-xl bg-brand-gold-500 hover:bg-brand-gold-400 text-gray-950 text-sm font-bold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 inline-flex items-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            Explorar Directorio ({totalMuseos} Museos)
+          </a>
+
+          <a
+            href={getHref('/caracterizacion')}
+            class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-semibold border border-white/20 transition-all inline-flex items-center gap-2"
+          >
+            <span>Realizar Caracterización</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="pt-6 border-t border-brand-burgundy-800/80 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-brand-burgundy-200">
+          <div>
+            <span class="font-bold text-white block">Resolución 1975 / 2013</span>
+            <span>Ministerio de las Culturas</span>
+          </div>
+          <div>
+            <span class="font-bold text-white block">Factor 7 CNA</span>
+            <span>Acreditación Institucional</span>
+          </div>
+          <div>
+            <span class="font-bold text-white block">Participación Gratuita</span>
+            <span>Autonomía y Cooperación</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Dashboard Metrics Section -->
+  <section class="py-16 -mt-8 relative z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <StatsDashboard />
+    </div>
+  </section>
+
+  <!-- Pilares Institucionales Section -->
+  <section class="py-16 bg-white border-y border-gray-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <span class="text-xs uppercase tracking-widest text-brand-burgundy-800 font-bold">Nuestro Enfoque</span>
+        <h2 class="text-3xl font-serif font-bold text-gray-900">
+          El Valor del Trabajo en Red para la Educación Superior
+        </h2>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          Creemos que, al trabajar en red, los museos universitarios fortalecen su relación con las comunidades y los territorios.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Pilar 1 -->
+        <div class="bg-gray-50/70 rounded-2xl p-6 border border-gray-100 hover:border-brand-burgundy-200 hover:bg-white hover:shadow-sm transition-all space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-burgundy-100 text-brand-burgundy-800 flex items-center justify-center font-bold">
+            01
+          </div>
+          <h3 class="font-serif font-bold text-base text-gray-900">Identificación y Diagnóstico</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Caracterización rigurosa de las tipologías de colección, capacidades técnicas y necesidades prioritarias del sector museal universitario.
+          </p>
+        </div>
+
+        <!-- Pilar 2 -->
+        <div class="bg-gray-50/70 rounded-2xl p-6 border border-gray-100 hover:border-brand-burgundy-200 hover:bg-white hover:shadow-sm transition-all space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-navy-100 text-brand-navy-800 flex items-center justify-center font-bold">
+            02
+          </div>
+          <h3 class="font-serif font-bold text-base text-gray-900">Cooperación y Cogestión</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Espacios conjuntos de diálogo, formulación de proyectos interinstitucionales, exposiciones itinerantes y transferencia de conocimientos técnicos.
+          </p>
+        </div>
+
+        <!-- Pilar 3 -->
+        <div class="bg-gray-50/70 rounded-2xl p-6 border border-gray-100 hover:border-brand-burgundy-200 hover:bg-white hover:shadow-sm transition-all space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-gold-100 text-brand-gold-800 flex items-center justify-center font-bold">
+            03
+          </div>
+          <h3 class="font-serif font-bold text-base text-gray-900">Apropiación Social</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Articulación directa entre docencia, investigación y proyección social, acercando la ciencia y el patrimonio a la sociedad civil.
+          </p>
+        </div>
+
+        <!-- Pilar 4 -->
+        <div class="bg-gray-50/70 rounded-2xl p-6 border border-gray-100 hover:border-brand-burgundy-200 hover:bg-white hover:shadow-sm transition-all space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+            04
+          </div>
+          <h3 class="font-serif font-bold text-base text-gray-900">Acreditación CNA</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Actor estratégico para evidenciar los factores de calidad (Factor 7, características 23 y 24) en los procesos de acreditación universitaria.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Discovery Carousel / Grid Section -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-brand-burgundy-800 font-bold">Patrimonio en Colombia</span>
+          <h2 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900">
+            Descubre Algunos Museos de la Red
+          </h2>
+        </div>
+        <a
+          href={getHref('/directorio')}
+          class="text-sm font-semibold text-brand-burgundy-800 hover:text-brand-burgundy-900 inline-flex items-center gap-1.5"
+        >
+          <span>Ver el directorio completo ({totalMuseos} museos)</span>
+          <span>→</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {featuredMuseos.map((museo) => (
+          <div class="bg-white rounded-2xl border border-gray-200/80 p-6 flex flex-col justify-between hover:shadow-md transition-all">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class={museo.naturaleza === 'Pública' ? 'badge-pub' : 'badge-priv'}>
+                  {museo.naturaleza}
+                </span>
+                <span class="text-xs text-gray-500 font-medium">
+                  {museo.ciudad}, {museo.departamento}
+                </span>
+              </div>
+              <h3 class="font-serif font-bold text-base text-gray-900">{museo.nombre}</h3>
+              <p class="text-xs text-brand-navy-700 font-medium">{museo.universidad}</p>
+              {museo.tipologia && <p class="text-xs text-gray-600 line-clamp-2">{museo.tipologia}</p>}
+            </div>
+            <div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between text-xs">
+              <span class={`${(estadoStyle[museo.estadoAtencion] ?? estadoStyle['Sin información']).text} font-medium flex items-center gap-1`}>
+                <span class={`w-1.5 h-1.5 rounded-full ${(estadoStyle[museo.estadoAtencion] ?? estadoStyle['Sin información']).dot}`}></span>
+                {museo.estadoAtencion}
+              </span>
+              {museo.paginaWeb && (
+                <a
+                  href={museo.paginaWeb}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-brand-burgundy-700 hover:text-brand-burgundy-900 font-semibold"
+                >
+                  Sitio web ↗
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner Caracterización -->
+  <section class="py-16 bg-gradient-to-r from-brand-burgundy-900 via-brand-burgundy-950 to-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="max-w-2xl space-y-4">
+          <span class="text-xs uppercase tracking-widest text-brand-gold-300 font-bold">
+            Convocatoria Nacional Abierta
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-serif font-bold text-white">
+            ¿Representas a un Museo o Colección Universitaria?
+          </h2>
+          <p class="text-sm sm:text-base text-brand-burgundy-100 leading-relaxed font-light">
+            La caracterización no genera costos, obligaciones jurídicas ni contractuales para tu universidad. Es una herramienta clave de diagnóstico para conectar capacidades y gestionar proyectos conjuntos en todo el territorio colombiano.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row lg:flex-col gap-3 w-full sm:w-auto shrink-0">
+          <a
+            href={getHref('/caracterizacion')}
+            class="px-6 py-3.5 rounded-xl bg-brand-gold-500 hover:bg-brand-gold-400 text-gray-950 text-sm font-bold text-center shadow-lg transition-all"
+          >
+            Quiero Realizar la Caracterización
+          </a>
+          <a
+            href="https://wa.me/573164963906"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold text-center transition-all inline-flex items-center justify-center gap-2"
+          >
+            <span>Consultar por WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

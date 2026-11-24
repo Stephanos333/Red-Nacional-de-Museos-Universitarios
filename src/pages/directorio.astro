@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { DirectorioMuseos } from '../components/DirectorioMuseos';
+import museosData from '../data/museos.json';
+import type { Museo } from '../components/DirectorioMuseos';
+
+const museos = museosData as Museo[];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const getHref = (href: string) => (href === '/' ? `${base}/` : `${base}${href}`);
+---
+
+<Layout
+  title="Directorio de Museos Universitarios"
+  description="Explora el directorio nacional de museos, colecciones y espacios patrimoniales de las Instituciones de Educación Superior de Colombia. Filtra por departamento, tipología y acreditación."
+>
+  <!-- Header Page Banner -->
+  <div class="bg-gradient-to-r from-brand-burgundy-950 via-brand-burgundy-900 to-gray-900 text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+      <div class="flex items-center gap-2 text-xs uppercase tracking-widest text-brand-gold-400 font-bold">
+        <span>Catálogo Nacional</span>
+        <span>•</span>
+        <span>Base Consolidada 2026</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-tight">
+        Directorio de Museos Universitarios
+      </h1>
+      <p class="text-sm sm:text-base text-brand-burgundy-100 max-w-2xl font-light">
+        Consulta, explora y conecta con los {museos.length} museos y colecciones patrimoniales de instituciones de educación superior públicas y privadas de Colombia.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Directory Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Privacy / Transparency Notice -->
+    <div class="mb-8 p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-amber-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>
+          <strong>Directorio Público Institucional:</strong> Contiene exclusivamente datos de contacto oficiales sanitizados conforme a la Ley Estatutaria 1581 de 2012 de Habeas Data.
+        </span>
+      </div>
+      <a
+        href={getHref('/caracterizacion')}
+        class="shrink-0 font-semibold text-brand-burgundy-800 hover:text-brand-burgundy-950 underline"
+      >
+        ¿Tu museo no aparece o requiere actualización?
+      </a>
+    </div>
+
+    <!-- Client-side Interactive React Island -->
+    <DirectorioMuseos client:load initialMuseos={museos} />
+  </div>
+</Layout>

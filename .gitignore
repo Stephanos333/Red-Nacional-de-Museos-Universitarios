@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build outputs
+dist/
+build/
+.astro/
+
+# Environment variables
+.env
+.env.production
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE & Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# CRITICAL HABEAS DATA & PRIVACY GUARDRAILS
+# Never commit raw database files containing personal phone numbers, WhatsApp groups,
+# internal KPIs or sensitive survey responses.
+data-raw/
+*.xlsx
+*.xls
+*.csv
+raw_*.json
+temp_*.json
+
+# Python
+__pycache__/
+*.pyc

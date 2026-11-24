@@ -1,0 +1,172 @@
+---
+import statsData from '../data/stats.json';
+
+const {
+  totalMuseos,
+  totalUniversidades,
+  totalEntidadesAliadas,
+  totalDepartamentos,
+  distribucionPorDepartamento,
+  porNaturaleza,
+  porEstadoAtencion,
+  porSimco
+} = statsData;
+
+const TOP_N = 8;
+const deptEntries = Object.entries(distribucionPorDepartamento) as [string, number][];
+const topDepartamentos = deptEntries.slice(0, TOP_N);
+const otrosDepartamentos = deptEntries.slice(TOP_N).map(([dept]) => dept);
+const maxDeptCount = Math.max(...deptEntries.map(([, n]) => n));
+
+const formatList = (items: string[]) =>
+  items.length <= 1 ? items.join('') : `${items.slice(0, -1).join(', ')} y ${items[items.length - 1]}`;
+
+const pubPercent = Math.round((porNaturaleza['Pública'] / totalMuseos) * 100);
+const privPercent = Math.round((porNaturaleza['Privada'] / totalMuseos) * 100);
+const abiertosPercent = Math.round(((porEstadoAtencion['Abierto'] + porEstadoAtencion['Cita previa']) / totalMuseos) * 100);
+const simcoTiles = [
+  { label: 'Registrados', value: porSimco['Sí'], box: 'bg-sky-50/70 border-sky-100', num: 'text-sky-900', txt: 'text-sky-800' },
+  { label: 'En proceso', value: porSimco['En proceso / Por confirmar'], box: 'bg-amber-50/70 border-amber-100', num: 'text-amber-900', txt: 'text-amber-800' },
+  { label: 'No registrados', value: porSimco['No'], box: 'bg-gray-50 border-gray-200', num: 'text-gray-900', txt: 'text-gray-700' },
+  { label: 'Sin información', value: porSimco['Sin información'], box: 'bg-gray-50 border-gray-200', num: 'text-gray-900', txt: 'text-gray-700' },
+];
+---
+
+<div class="space-y-10">
+  <!-- Key Metrics 4-Cards Grid -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <div class="bg-white rounded-2xl p-6 border border-brand-burgundy-100 shadow-sm relative overflow-hidden group">
+      <div class="absolute -right-3 -bottom-3 w-20 h-20 bg-brand-burgundy-50 rounded-full group-hover:scale-110 transition-transform -z-0"></div>
+      <div class="relative z-10 space-y-1">
+        <span class="text-xs font-semibold uppercase tracking-wider text-brand-burgundy-800">Museos y Espacios</span>
+        <div class="text-3xl sm:text-4xl font-serif font-black text-gray-900 tracking-tight">{totalMuseos}</div>
+        <p class="text-xs text-gray-500">Colecciones patrimoniales identificadas</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 border border-brand-navy-100 shadow-sm relative overflow-hidden group">
+      <div class="absolute -right-3 -bottom-3 w-20 h-20 bg-brand-navy-50 rounded-full group-hover:scale-110 transition-transform -z-0"></div>
+      <div class="relative z-10 space-y-1">
+        <span class="text-xs font-semibold uppercase tracking-wider text-brand-navy-800">Universidades / IES</span>
+        <div class="text-3xl sm:text-4xl font-serif font-black text-gray-900 tracking-tight">{totalUniversidades}</div>
+        <p class="text-xs text-gray-500">
+          Instituciones de educación superior{totalEntidadesAliadas > 0 && ` (+${totalEntidadesAliadas} entidad${totalEntidadesAliadas === 1 ? '' : 'es'} aliada${totalEntidadesAliadas === 1 ? '' : 's'})`}
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 border border-brand-gold-200 shadow-sm relative overflow-hidden group">
+      <div class="absolute -right-3 -bottom-3 w-20 h-20 bg-brand-gold-50 rounded-full group-hover:scale-110 transition-transform -z-0"></div>
+      <div class="relative z-10 space-y-1">
+        <span class="text-xs font-semibold uppercase tracking-wider text-brand-gold-800">Territorios</span>
+        <div class="text-3xl sm:text-4xl font-serif font-black text-gray-900 tracking-tight">{totalDepartamentos}</div>
+        <p class="text-xs text-gray-500">Departamentos con presencia activa</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 border border-emerald-100 shadow-sm relative overflow-hidden group">
+      <div class="absolute -right-3 -bottom-3 w-20 h-20 bg-emerald-50 rounded-full group-hover:scale-110 transition-transform -z-0"></div>
+      <div class="relative z-10 space-y-1">
+        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800">Atención al Público</span>
+        <div class="text-3xl sm:text-4xl font-serif font-black text-gray-900 tracking-tight">{abiertosPercent}%</div>
+        <p class="text-xs text-gray-500">Abiertos permanente o con cita previa</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regional Distribution & Institutional Composition -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Top Departments Bar Chart -->
+    <div class="lg:col-span-2 bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-sm space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-serif font-bold text-gray-900">Distribución Territorial de Museos</h3>
+          <p class="text-xs text-gray-500">Principales departamentos con mayor concentración de espacios patrimoniales</p>
+        </div>
+        <span class="text-xs font-semibold bg-brand-burgundy-50 text-brand-burgundy-800 px-3 py-1 rounded-full border border-brand-burgundy-100">
+          Cobertura Nacional
+        </span>
+      </div>
+
+      <div class="space-y-3.5">
+        {topDepartamentos.map(([dept, count]) => {
+          const widthPercent = Math.round((count / maxDeptCount) * 100);
+          return (
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-medium text-gray-700">
+                <span class="truncate max-w-[200px] sm:max-w-none">{dept}</span>
+                <span class="font-bold text-gray-900">{count} museos ({Math.round((count / totalMuseos) * 100)}%)</span>
+              </div>
+              <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
+                <div
+                  class="bg-gradient-to-r from-brand-burgundy-800 to-brand-burgundy-600 h-full rounded-full transition-all duration-500"
+                  style={`width: ${widthPercent}%`}
+                ></div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {otrosDepartamentos.length > 0 && (
+        <p class="text-[11px] text-gray-500 italic">
+          * Incluye además representación en {formatList(otrosDepartamentos)}.
+        </p>
+      )}
+    </div>
+
+    <!-- Institutional Nature & SIMCO Progress -->
+    <div class="space-y-6">
+      <!-- Naturaleza Jurídica Card -->
+      <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-4">
+        <h3 class="text-base font-serif font-bold text-gray-900">Naturaleza Jurídica</h3>
+        <p class="text-xs text-gray-500">Equilibrio entre el sistema público y privado universitario</p>
+
+        <div class="space-y-3 pt-2">
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-medium text-gray-700">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                Universidades Públicas
+              </span>
+              <span class="font-bold text-gray-900">{porNaturaleza['Pública']} ({pubPercent}%)</span>
+            </div>
+            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+              <div class="bg-blue-600 h-full rounded-full" style={`width: ${pubPercent}%`}></div>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-medium text-gray-700">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+                Universidades Privadas
+              </span>
+              <span class="font-bold text-gray-900">{porNaturaleza['Privada']} ({privPercent}%)</span>
+            </div>
+            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+              <div class="bg-purple-600 h-full rounded-full" style={`width: ${privPercent}%`}></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado SIMCO Card -->
+      <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-4">
+        <h3 class="text-base font-serif font-bold text-gray-900">Articulación SIMCO</h3>
+        <p class="text-xs text-gray-500">Sistema de Información de Museos Colombianos</p>
+
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          {simcoTiles.map((tile) => (
+            <div class={`p-3 rounded-xl border text-center ${tile.box}`}>
+              <div class={`text-xl font-serif font-bold ${tile.num}`}>{tile.value}</div>
+              <span class={`text-[11px] font-medium ${tile.txt}`}>{tile.label}</span>
+            </div>
+          ))}
+        </div>
+        <p class="text-[11px] text-gray-500 leading-snug">
+          La RNMU asesora técnicamente a las IES para consolidar y renovar su inscripción en SIMCO.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

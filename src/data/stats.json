@@ -1,0 +1,44 @@
+{
+  "totalMuseos": 94,
+  "totalUniversidades": 38,
+  "totalEntidadesAliadas": 1,
+  "totalDepartamentos": 18,
+  "distribucionPorDepartamento": {
+    "Bogotá D.C.": 38,
+    "Boyacá": 11,
+    "Antioquia": 9,
+    "Santander": 6,
+    "Cundinamarca": 4,
+    "Tolima": 4,
+    "Valle del Cauca": 4,
+    "Caldas": 3,
+    "Cauca": 3,
+    "Magdalena": 3,
+    "Atlántico": 2,
+    "Amazonas": 1,
+    "Chocó": 1,
+    "Córdoba": 1,
+    "Huila": 1,
+    "La Guajira": 1,
+    "Meta": 1,
+    "Nariño": 1
+  },
+  "porNaturaleza": {
+    "Pública": 70,
+    "Privada": 24,
+    "No especificada": 0
+  },
+  "porEstadoAtencion": {
+    "Abierto": 84,
+    "Cita previa": 6,
+    "Cerrado temporalmente": 2,
+    "Cerrado": 1,
+    "Sin información": 1
+  },
+  "porSimco": {
+    "Sí": 23,
+    "No": 16,
+    "En proceso / Por confirmar": 5,
+    "Sin información": 50
+  }
+}

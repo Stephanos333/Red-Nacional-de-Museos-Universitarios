@@ -1,0 +1,73 @@
+name: Deploy RNMU Portal to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & Validate Data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Guard - no raw data files in the repository
+        run: |
+          # La base cruda nunca debe versionarse (Ley 1581 de 2012).
+          if git ls-files | grep -Ei '(^|/)data-raw/|\.(csv|xlsx|xls)$'; then
+            echo "Error crítico: hay archivos de datos crudos versionados." >&2
+            exit 1
+          fi
+
+      - name: Validate public data (Habeas Data, catalogs, stats, FAQ)
+        # Sin data-raw en CI: los correos se validan con las reglas heurísticas
+        # de scripts/rnmu_rules.py. Ver scripts/validar_json.py.
+        run: python scripts/validar_json.py
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Type check (astro check)
+        run: npm run check
+
+      - name: Build Static Site with Astro
+        run: npm run build
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
