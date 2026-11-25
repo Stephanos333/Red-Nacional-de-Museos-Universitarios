@@ -46,3 +46,13 @@ temp_*.json
 # Python
 __pycache__/
 *.pyc
+
+# Informes de uso interno del Comité (fuente .md y salidas de scripts/generar_informe_pdf.py)
+docs/informe_reunion_inicial_rnmu.md
+docs/informe_reunion_inicial_rnmu.html
+docs/Informe_Inicial_Arquitectura_y_Datos_RNMU.pdf
+
+# Informes de uso interno del Comité (fuente .md y salidas de scripts/generar_informe_pdf.py)
+docs/informe_reunion_inicial_rnmu.md
+docs/informe_reunion_inicial_rnmu.html
+docs/Informe_Inicial_Arquitectura_y_Datos_RNMU.pdf
